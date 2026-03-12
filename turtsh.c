@@ -1,12 +1,13 @@
 #include "turtsh.h"
 
 char *turtsh_read(){
-   char *buf = malloc(32); 
-   char *prompt = buf;
+   char *prompt = malloc(128); 
+   char *buf = prompt;
    int c;
-   while(*prompt != '\n') {
-        *prompt++ = fgetc(stdin);
+   printf(">");
+   while(((c = fgetc(stdin)) != '\n') && c != EOF) {
+        *prompt++ = c;
    }
-   printf("%c", *prompt);
-   return prompt;
+   *prompt = '\0';
+   return buf;
 }

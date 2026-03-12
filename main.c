@@ -3,6 +3,8 @@
 
 int main() {
     printf("Turtshell Started\n");
-    turtsh_read();
+    char *line = turtsh_read();
+    printf("Input was: %s", line);
+    free(line);
     return 0;
 }
