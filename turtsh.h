@@ -2,6 +2,7 @@
 #define TURTSH
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 void turtsh_init();
 char *turtsh_read();
