@@ -7,6 +7,6 @@
 void turtsh_init();
 char *turtsh_read();
 char **turtsh_split(char *prompt);
-int turtsh(char **arguments);
+int turtsh_execute(char **arguments);
 
 #endif

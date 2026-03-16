@@ -3,7 +3,10 @@
     - [ ] Define Behaviours/Aspects
     - [ ]  
 2. *Interpret* - the shell reads command from `stdin` (could be *interactive, file*).
-
+    - [ ] Accept inputs
+    - [ ] Tokenize and return a null terminated array of pointers to each tokens
+    - [ ] Fork processes and Handle hierarchy
+    - [ ] Execute with appropriate commands
 3. *Terminate* - Cleans up and exits
     - [ ] Shutdown commands
     - [ ] Frees up memory
@@ -22,7 +25,7 @@
 - Tokenize arguments
 `char **turtsh_split(char *prompt);`
 - Run 
-`int turtsh(**arguments);`
+`int turtsh_execute(**arguments);`
 - Builtin Functions
 Define builtin functions that cant be directly forked as a child process
 `int ls_cd(**arguments);`

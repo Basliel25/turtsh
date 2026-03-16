@@ -8,11 +8,49 @@ char *turtsh_read(){
 
    printf(">");
    while(((c = fgetc(stdin)) != '\n') && c != EOF) {
+       // Keep reading char from fgetc and appending to buffer
         *prompt++ = c;
+
+        //Handle buffer overflow
         int position = prompt - buf;
         if(position >= 128) 
             prompt = realloc(prompt, strlen(buf)*2);
    }
+   //Assign Null value to end
    *prompt = '\0';
    return buf;
 }
+
+char **turtsh_split(char *prompt) {
+
+    // Initialize dynamic memory space
+    // Initial capacity: 8 chars
+    int size_of_tokens = 8;
+    char **tokens = malloc(size_of_tokens * (sizeof(char *))); 
+
+    // Strtok to tokenize with the delimeters:
+    // - '\t' tab
+    // - ' ' space
+    // - '\n' new line
+    int token_s = 0;
+    char *tokenized = strtok(prompt, "\t\n ");
+
+    // Assign tokenized chars to storage
+    while(tokenized != NULL) {
+       tokens[token_s] = tokenized;
+       token_s++;
+       tokenized = strtok(NULL, "\t\n "); 
+
+       // Handle buffer overflow
+       // Double size of tokens when full
+       if(token_s >= size_of_tokens) {
+            size_of_tokens *= 2;
+            tokens = realloc(tokens, size_of_tokens * (sizeof(char *)));
+       }
+    }
+    // Add null to the end of tokens
+    tokens[token_s] = '\0';
+    return tokens;
+}
+
+int turtsh_execute(char **arguments) {return 0;}
