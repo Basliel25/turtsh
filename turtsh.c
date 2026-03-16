@@ -6,7 +6,7 @@ char *turtsh_read(){
    char *buf = prompt;
    int c;
 
-   printf(">");
+   printf("(turtsh)>");
    while(((c = fgetc(stdin)) != '\n') && c != EOF) {
        // Keep reading char from fgetc and appending to buffer
         *prompt++ = c;
@@ -53,4 +53,30 @@ char **turtsh_split(char *prompt) {
     return tokens;
 }
 
-int turtsh_execute(char **arguments) {return 0;}
+int turtsh_execute(char **arguments) {
+
+    // The process id of the child fork
+    pid_t pid = fork();
+
+    if(pid == 0) {
+        execvp(arguments[0], arguments);
+        //If execvp failed
+        perror("Process failed");
+        exit(1);
+    } else if(pid > 0) {
+        waitpid(pid, NULL, 0);
+    } else
+        printf("Fork failed");
+    return 0; 
+}
+
+void turtsh_init() {
+   while(1) {
+        char *prompt = turtsh_read();
+        char **arguments = turtsh_split(prompt);
+
+        // Execute arguments
+        turtsh_execute(arguments);
+        printf("\n________________________________\n");
+   } 
+}
