@@ -7,9 +7,20 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
+typedef struct {
+   char **args;
+   char *redirect;
+} Command;
+
+typedef struct {
+    Command *command;
+    int *count;
+    int *capacity;
+} PLine;
+
 void turtsh_init();
 char *turtsh_read();
-char **turtsh_split(char *prompt);
-int turtsh_execute(char **arguments);
+PLine **turtsh_split(char *prompt);
+int turtsh_execute(PLine parsed_line);
 
 #endif
