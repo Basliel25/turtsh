@@ -19,26 +19,55 @@
 3. *Execute* - run the command with the appropriate commands
 
 ## Core Architecture
-- Initialize 
+##### - Initialize 
     - Initialize the shell with an path including /bin - `void turtsh_init();` 
     - The path - `char **shell_path;`
     - The path count - `int path_s;` 
-- Read command from input
+##### - Read command from input
     - Reads lines using `fgetc` and returns char array with dynamic memory - `char *turtsh_read();`
-- Tokenize arguments
-    - Splits the prompt with delimeters, returns array of pointers to tokenized elements of the prompt - `Command turtsh_split(char *prompt);`
-    - Retrun a command struct with redirection
+##### - Tokenize arguments
+    - Splits the prompt with delimeters, returns array of pointers to tokenized elements of the prompt - `PLine turtsh_split(char *prompt);`
+    - Seprate parallel commands into ParsedLine 
+        ```C
+        typedef sruct {
+            Command *commands;
+            int commands;
+            int command_s; //Command size
+        } PLine    
+        ```
+    - Each command is a variable with related arguments and a redirection path
         `typedef struct {
             char **arguments;
             char *redirect_path // points to NULL if no redirection;
          } Command`
-- Run 
-    - If command has redirection 
-    - Execute command along with path using `execv()` library - `int turtsh_execute(Command command);`
+
+##### - Helper Functions
+    - Split using a delimeter, returns array of tokens. 
+    ```C
+    char **split_delimeter(char *prompt, char *delimeter, int *count);
+    ```
+    - Extract redirection, returns the filename or NULL if not file name.
+    ```C
+    char *extract_redirect(char **args); 
+    ```
+    - Write the output of the command to the redirected file
+    ```C
+    void redirect_output(Stringhh
+    ```
+
+
+##### - Run 
+    - Excute each command of PLine
+        - If command has redirection 
+            - Create a file descriptor `fd` for the output file
+            - Attach stdout to `fd`
+        - Execute commands with each arguments
+    - Clean up memory and prepare for next prompt
+
 - Builtin Functions
 Define builtin functions that cant be directly forked as a child process
-`int ls_cd(**arguments);`
-`int ls_exit(**arguments);`
+`int ls_cd(Command command);`
+`int ls_exit(Command command);`
 `int ls_cd(**arguments);`
 `int path(**arguments);`
 
@@ -52,3 +81,4 @@ turtsh/
 |-- turtsh.h
 |-- README
 |-- Makefile
+
