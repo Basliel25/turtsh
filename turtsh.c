@@ -6,7 +6,9 @@ char *turtsh_read(){
    char *buf = prompt;
    int c;
 
-   printf("(turtsh)>");
+   char cwd[1024];
+   getcwd(cwd,sizeof(cwd));
+   printf("(turtsh in %s)>", cwd);
    while(((c = fgetc(stdin)) != '\n') && c != EOF) {
        // Keep reading char from fgetc and appending to buffer
         *prompt++ = c;
@@ -73,10 +75,16 @@ int turtsh_execute(char **arguments) {
 void turtsh_init() {
    while(1) {
         char *prompt = turtsh_read();
-        char **arguments = turtsh_split(prompt);
 
+        if(prompt == NULL) {
+            printf("No input detected\n");
+            continue;
+        }
+
+        // Tokenize input into arguments
+        char **arguments = turtsh_split(prompt);
         // Execute arguments
         turtsh_execute(arguments);
-        printf("\n________________________________\n");
+        printf("________________________________\n");
    } 
 }
