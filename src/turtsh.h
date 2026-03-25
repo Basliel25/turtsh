@@ -23,5 +23,4 @@ char *turtsh_read();
 PLine **turtsh_split(char *prompt);
 int turtsh_execute(PLine parsed_line);
 
-char **split_delimeter(char *prompt, char *delimeter, int *count);
 #endif
