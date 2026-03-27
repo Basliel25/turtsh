@@ -1,4 +1,5 @@
 #include "turtsh.h"
+#include "Parser/parser.h"
 
 char *turtsh_read(){
 
@@ -23,52 +24,37 @@ char *turtsh_read(){
    return buf;
 }
 
-char **turtsh_split(char *prompt) {
+PLine turtsh_split(char *prompt) {
 
-    // Initialize dynamic memory space
-    // Initial capacity: 8 chars
-    int size_of_tokens = 8;
-    char **tokens = malloc(size_of_tokens * (sizeof(char *))); 
+    int size_of_commands = 8;
+    PLine command; 
 
-    // Strtok to tokenize with the delimeters:
-    // - '\t' tab
-    // - ' ' space
-    // - '\n' new line
-    int token_s = 0;
-    char *tokenized = strtok(prompt, "\t\n ");
-
-    // Assign tokenized chars to storage
-    while(tokenized != NULL) {
-       tokens[token_s] = tokenized;
-       token_s++;
-       tokenized = strtok(NULL, "\t\n "); 
-
-       // Handle buffer overflow
-       // Double size of tokens when full
-       if(token_s >= size_of_tokens) {
-            size_of_tokens *= 2;
-            tokens = realloc(tokens, size_of_tokens * (sizeof(char *)));
-       }
-    }
-    // Add null to the end of tokens
-    tokens[token_s] = '\0';
-    return tokens;
+    return command;
 }
 
-int turtsh_execute(char **arguments) {
+int turtsh_execute(PLine PLine) {
 
     // The process id of the child fork
     pid_t pid = fork();
 
-    if(pid == 0) {
-        execvp(arguments[0], arguments);
-        //If execvp failed
-        perror("Process failed");
-        exit(1);
-    } else if(pid > 0) {
-        waitpid(pid, NULL, 0);
-    } else
-        printf("Fork failed");
+    // Access Parsed Line
+    int command_count = (int) PLine.count;
+    Command *commands = PLine.command;
+
+    // Loop over all commands in PLine.commands
+    for(int i = command_count; i > 0; i--) {
+        char **command = commands[command_count - i].args;
+
+        if(pid == 0) {
+            execvp(command[0], command);
+            //If execvp failed
+            perror("Process failed");
+            exit(1);
+        } else if(pid > 0) {
+            waitpid(pid, NULL, 0);
+        } else
+            printf("Fork failed");
+    }
     return 0; 
 }
 
@@ -82,9 +68,9 @@ void turtsh_init() {
         }
 
         // Tokenize input into arguments
-        char **arguments = turtsh_split(prompt);
+        PLine parsed_line = turtsh_split(prompt);
         // Execute arguments
-        turtsh_execute(arguments);
+        turtsh_execute(parsed_line);
         printf("________________________________\n");
    } 
 }

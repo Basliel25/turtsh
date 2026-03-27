@@ -42,6 +42,7 @@
          } Command`
 
 ##### - Helper Functions
+###### Parser Module
     - Split using a delimeter, returns array of tokens. 
     ```C
     char **split_delimeter(char *prompt, char *delimeter, int *count);
@@ -50,12 +51,10 @@
     ```C
     char *extract_redirect(char **args); 
     ```
-    - Write the output of the command to the redirected file
+    - Free memory and avoid leaks
     ```C
-    void redirect_output(Stringhh
+    char *extract_redirect(char **args); 
     ```
-
-
 ##### - Run 
     - Excute each command of PLine
         - If command has redirection 
