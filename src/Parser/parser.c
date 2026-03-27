@@ -1,4 +1,5 @@
 #include "parser.h"
+#include <stdbool.h>
 
 char **split_delimeter(char *prompt, char *delimeter) {
     // Initialize dynamic memory space
@@ -28,5 +29,14 @@ char **split_delimeter(char *prompt, char *delimeter) {
 
     return tokens; 
 }
+char *extract_redirect(char *command) {return '\0';} 
 
-char *extract_redirect(char **args); 
+bool has_redirect(char *line){
+    int iterate = 0;
+    while(line[iterate] != '\0') {
+        if(line[iterate] == '>')
+            return true;
+        iterate++;
+    }
+    return false;
+}

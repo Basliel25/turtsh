@@ -2,13 +2,12 @@
 #define TURTSH
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 #include <string.h>
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
 
-char **shell_path;
-int path_s;
 typedef struct {
    char **args;
    char *redirect;
@@ -16,8 +15,8 @@ typedef struct {
 
 typedef struct {
     Command *command;
-    int *count;
-    int *capacity;
+    int count;
+    int capacity;
 } PLine;
 
 void turtsh_init();

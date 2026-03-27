@@ -25,6 +25,7 @@ char **split_delimeter(char *prompt, char *delimeter);
  * @return char *redirect the string containg the redirect destination
  *          NULL if no redirects
  */
-char *extract_redirect(char **args); 
+char *extract_redirect(char *args); 
 
+bool has_redirect(char *line);
 #endif
