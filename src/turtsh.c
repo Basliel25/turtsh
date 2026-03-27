@@ -45,9 +45,11 @@ PLine turtsh_split(char *prompt) {
         char *command = (tok_commands[command_count]);
 
         // Check for redirect in command
-        if(has_redirect(command)) 
+        if(has_redirect(command)) { 
             // Split, extract, attach redirect to interface
             current_command.redirect = extract_redirect(command);
+        } else 
+            current_command.redirect = NULL;
         
         // Tokenize for args using ' \t' as delimeter
         int arg_count = 0;
@@ -84,19 +86,19 @@ PLine turtsh_split(char *prompt) {
 
 int turtsh_execute(PLine PLine) {
 
-    // The process id of the child fork
-    pid_t pid = fork();
 
     // Access Parsed Line
     int command_count = PLine.count;
-    Command *commands = PLine.command;
 
     // Loop over all commands in PLine.commands
-    for(int i = command_count; i > 0; i--) {
-        char **command = commands[command_count - i].args;
+    for(int i = 0; i < command_count; i++) {
+        // The process id of the child fork
+        pid_t pid = fork();
+        Command current_command = PLine.command[i];
 
         if(pid == 0) {
-            execvp(command[0], command);
+            printf("Redirect for %s: %s\n", current_command.args[0], current_command.redirect);
+            execvp(current_command.args[0], current_command.args);
             //If execvp failed
             perror("Process failed");
             exit(1);

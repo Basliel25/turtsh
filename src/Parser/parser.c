@@ -29,7 +29,26 @@ char **split_delimeter(char *prompt, char *delimeter) {
 
     return tokens; 
 }
-char *extract_redirect(char *command) {return '\0';} 
+char *extract_redirect(char *command) {
+    // Handle multiple redirects
+    // Handle no file name after redirect
+    char *redirect;
+    // Parse the command with redirect
+    // While *command is not NULL, *command++
+    while(*command != '\0') {
+        if(*command == '>') {
+            *command = '\0';
+            redirect = command + 1;
+            while(*redirect == ' ' || *redirect == '\t')
+                redirect++;
+            return redirect;
+        }
+        command++;
+    }
+
+    return '\0';
+
+} 
 
 bool has_redirect(char *line){
     int iterate = 0;
