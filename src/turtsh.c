@@ -1,5 +1,6 @@
 #include "turtsh.h"
 #include "Parser/parser.h"
+#include "builtins.h"
 #include <unistd.h>
 
 char *turtsh_read(){
@@ -100,10 +101,17 @@ int turtsh_execute(PLine PLine) {
 
     // Loop over all commands in PLine.commands
     for(int i = 0; i < command_count; i++) {
+        // Handle  CD and exit
+        Command current_command = PLine.command[i];
+        if(strcmp(current_command.args[0], "cd") == 0) {
+            turtsh_cd(current_command.args[1]);
+            continue;
+        } else if(strcmp(current_command.args[0], "exit") == 0) {
+            turtsh_exit();
+        }
+
         // The process id of the child fork
         pid_t pid = fork();
-        Command current_command = PLine.command[i];
-
         if(pid == 0) {
             if(current_command.redirect != NULL) {
                 // Redirect Stdout to file
