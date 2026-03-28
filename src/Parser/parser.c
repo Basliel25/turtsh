@@ -21,7 +21,7 @@ char **split_delimeter(char *prompt, char *delimeter) {
         // handle buffer overflow
         if(token_s >= size_of_tokens) {
             size_of_tokens *= 2;
-            tokens = realloc(tokens, size_of_tokens);
+            tokens = realloc(tokens, size_of_tokens * sizeof(char *));
         }
     }
 
@@ -31,21 +31,26 @@ char **split_delimeter(char *prompt, char *delimeter) {
 }
 char *extract_redirect(char *command) {
     // Handle multiple redirects
-    // Handle no file name after redirect
-    char *redirect;
+    char *redirect = '\0';
+    int redirect_count = 0;
     // Parse the command with redirect
     // While *command is not NULL, *command++
     while(*command != '\0') {
         if(*command == '>') {
+            redirect_count++;
+            if(redirect_count > 1)
+                return NULL;
             *command = '\0';
             redirect = command + 1;
-            while(*redirect == ' ' || *redirect == '\t')
+            while((*redirect == ' ' || *redirect == '\t') && *redirect != '\0') {
                 redirect++;
-            return redirect;
+            }
+            if(*redirect == '\0')
+                return NULL;
         }
         command++;
     }
-    return '\0';
+    return redirect;
 } 
 
 bool has_redirect(char *line){

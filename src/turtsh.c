@@ -45,11 +45,15 @@ PLine turtsh_split(char *prompt) {
         char *command = (tok_commands[command_count]);
 
         // Check for redirect in command
-        if(has_redirect(command)) { 
+        if(has_redirect(command)) {
             // Split, extract, attach redirect to interface
             current_command.redirect = extract_redirect(command);
-        } else 
-            current_command.redirect = NULL;
+            if(current_command.redirect == NULL) {
+                printf("\nInvalid Redirect\n");
+                current_command.redirect = NULL;
+            } 
+        } else  
+                current_command.redirect = NULL;
         
         // Tokenize for args using ' \t' as delimeter
         int arg_count = 0;
@@ -61,16 +65,20 @@ PLine turtsh_split(char *prompt) {
         char **command_args = split_delimeter(command, delimeter);
         // Set up args in command array for each command in Pline
         while(command_args[arg_count] != NULL) {
-           current_command.args[arg_count] = command_args[arg_count];
-           arg_count++;
+            current_command.args[arg_count] = command_args[arg_count];
+            arg_count++;
 
-           if(arg_count >= arg_s) {
-               arg_s *= 2;
-               current_command.args = realloc(current_command.args, arg_s);
-           }
+            if(arg_count >= arg_s) {
+                arg_s *= 2;
+                current_command.args = realloc(current_command.args, arg_s * (sizeof(char *)));
+            }
         }
         current_command.args[arg_count] = '\0';
         // Add this constructed command to PLine
+        if(size_of_commands >= command_count) {
+            size_of_commands *= 2;
+            parsed_commands = realloc(parsed_commands, size_of_commands * (sizeof(char *)));
+        }
         parsed_commands[command_count] = current_command;
         // Increase command_count
         command_count++;
