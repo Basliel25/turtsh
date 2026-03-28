@@ -45,9 +45,7 @@ char *extract_redirect(char *command) {
         }
         command++;
     }
-
     return '\0';
-
 } 
 
 bool has_redirect(char *line){

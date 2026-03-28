@@ -97,7 +97,17 @@ int turtsh_execute(PLine PLine) {
         Command current_command = PLine.command[i];
 
         if(pid == 0) {
-            printf("Redirect for %s: %s\n", current_command.args[0], current_command.redirect);
+            if(current_command.redirect != NULL) {
+                // Redirect Stdout to file
+                printf("Redirect for %s: %s\n", current_command.args[0], current_command.redirect);
+                int fd = open(current_command.redirect, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+                if(fd == -1) {
+                    perror("File redirection failed");
+                    exit(1);
+                }
+                dup2(fd, 1);
+                close(fd);
+            }
             execvp(current_command.args[0], current_command.args);
             //If execvp failed
             perror("Process failed");
