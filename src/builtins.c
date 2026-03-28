@@ -2,4 +2,4 @@
 #include "turtsh.h"
 
 int turtsh_cd(char *path) {return chdir(path);}
-void turtsh_exit() {exit(1);}
+void turtsh_exit() {exit(0);}

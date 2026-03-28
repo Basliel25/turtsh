@@ -1,3 +1,6 @@
 *.o
 turtsh
 output.txt
+docs/html
+docs/latex
+

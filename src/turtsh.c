@@ -76,9 +76,9 @@ PLine turtsh_split(char *prompt) {
         }
         current_command.args[arg_count] = '\0';
         // Add this constructed command to PLine
-        if(size_of_commands >= command_count) {
+        if(size_of_commands <= command_count) {
             size_of_commands *= 2;
-            parsed_commands = realloc(parsed_commands, size_of_commands * (sizeof(char *)));
+            parsed_commands = realloc(parsed_commands, size_of_commands * (sizeof(Command)));
         }
         parsed_commands[command_count] = current_command;
         // Increase command_count

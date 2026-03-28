@@ -25,7 +25,7 @@ char **split_delimeter(char *prompt, char *delimeter) {
         }
     }
 
-    tokens[token_s] = '\0';
+    tokens[token_s] = NULL;
 
     return tokens; 
 }

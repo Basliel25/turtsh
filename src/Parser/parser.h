@@ -24,8 +24,13 @@ char **split_delimeter(char *prompt, char *delimeter);
  * @param char **args tokenized commands
  * @return char *redirect the string containg the redirect destination
  *          NULL if no redirects
- */
+*/
 char *extract_redirect(char *args); 
 
+/**
+ * @brief Confirms if there is a redirect in a command
+ * @param char *line The command with potential redirection
+ * @return bool true if present, false if not.
+ */
 bool has_redirect(char *line);
 #endif
