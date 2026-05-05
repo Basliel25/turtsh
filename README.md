@@ -3,7 +3,7 @@
 # turtsh
 
 A Simple toy UNIX shell implementation in C.
-Read about how i made it: [https://basz-website.basgug25.workers.dev/projects/turtsh/](Here.)
+Read about how i made it ([Here.](https://basz-website.basgug25.workers.dev/projects/turtsh/))
 ## Features
 - Command execution via `fork`/`execvp`
 - Output redirection (`>`)
